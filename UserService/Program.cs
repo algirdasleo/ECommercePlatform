@@ -1,6 +1,19 @@
+using SharedLibrary.Interfaces;
+using SharedLibrary.Services;
+using UserService.Services;
+using UserService.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+if (string.IsNullOrEmpty(connectionString))
+{
+    throw new Exception("Default Connection is not set");
+}
+builder.Services.AddScoped<DBConnectionFactory>(_ => new DBConnectionFactory(connectionString));
 
+
+builder.Services.AddScoped<IDBService<User>, UserDBService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
