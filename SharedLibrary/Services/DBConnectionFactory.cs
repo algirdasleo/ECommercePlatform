@@ -1,3 +1,7 @@
+using System.Data.Common;
+using System.Threading.Tasks;
+using Npgsql;
+
 namespace SharedLibrary.Services
 {
     public class DBConnectionFactory 
