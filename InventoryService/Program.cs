@@ -1,5 +1,7 @@
 using SharedLibrary.Interfaces;
 using SharedLibrary.Services;
+using InventoryService.Models;
+using InventoryService.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -15,6 +17,7 @@ if (string.IsNullOrEmpty(connectionString))
     throw new Exception("Default Connection is not set");
 }
 builder.Services.AddScoped<DBConnectionFactory>(_ => new DBConnectionFactory(connectionString));
+builder.Services.AddScoped<IDBService<InventoryItem>, InventoryDBService>();
 
 var app = builder.Build();
 

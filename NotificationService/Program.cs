@@ -1,5 +1,7 @@
 using SharedLibrary.Interfaces;
 using SharedLibrary.Services;
+using NotificationService.Models;
+using NotificationService.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -9,15 +11,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var databaseName = builder.Configuration["DatabaseName"];
-var connectionStringTemplate = builder.Configuration.GetConnectionString("DatabaseTemplate");
-// database template = "Host=localhost;Port=5432;Username=postgres;Password=postgres;Database={0}";
-if (string.IsNullOrEmpty(connectionStringTemplate))
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+if (string.IsNullOrEmpty(connectionString))
 {
-    throw new Exception("DatabaseTemplate is not set");
+    throw new Exception("Default Connection is not set");
 }
-var connectionString = string.Format(connectionStringTemplate, databaseName);
 builder.Services.AddScoped<DBConnectionFactory>(_ => new DBConnectionFactory(connectionString));
+
+
+builder.Services.AddScoped<IDBService<Notification>, NotificationDBService>();
 
 
 var app = builder.Build();
