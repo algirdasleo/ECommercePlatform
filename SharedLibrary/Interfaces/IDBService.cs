@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 
 namespace SharedLibrary.Interfaces
 {
-    public interface IDBService
+    public interface IDBService<T>
     {
-        Task<List<T>> GetAllAsync<T>();
-        Task<T> GetByIdAsync<T>(int id);
-        Task<T> CreateAsync<T>(T entity);
-        Task<T> UpdateAsync<T>(T entity);
-        Task<T> DeleteAsync<T>(int id);
+        Task<List<T>> GetAllAsync();
+        Task<T?> GetByIdAsync(int id);
+        Task<T> CreateAsync(T entity);
+        Task<T> UpdateAsync(T entity);
+        Task<T> DeleteAsync(int id);
     }
 }
