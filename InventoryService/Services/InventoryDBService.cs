@@ -53,8 +53,9 @@ namespace InventoryService.Services
             {
                 var sqlQuery = @"
                     UPDATE inventoryItems
-                    SET InventoryItemId = @InventoryItemId, ProductId = @ProductId,
+                    SET ProductId = @ProductId,
                         QuantityAvailable = @QuantityAvailable
+                    WHERE InventoryItemId = @InventoryItemId
                     RETURNING *";
                 var updatedInventoryItem = await connection.QueryFirstOrDefaultAsync<InventoryItem>(sqlQuery, inventoryItem);
                 if (updatedInventoryItem == null)

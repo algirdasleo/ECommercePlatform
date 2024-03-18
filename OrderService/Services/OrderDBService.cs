@@ -53,9 +53,10 @@ namespace OrderService.Services
             {
                 var sqlQuery = @"
                     UPDATE orders
-                    SET OrderId = @OrderId, UserId = @UserId, 
+                    SET UserId = @UserId, 
                         OrderDate = @OrderDate, TotalAmount = @TotalAmount, 
                         OrderStatus = @OrderStatus
+                    WHERE OrderId = @OrderId
                     RETURNING *";
                 var updatedOrder = await connection.QueryFirstOrDefaultAsync<Order>(sqlQuery, order);
                 if (updatedOrder == null)

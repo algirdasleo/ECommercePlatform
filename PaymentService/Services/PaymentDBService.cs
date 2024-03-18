@@ -56,6 +56,7 @@ namespace PaymentService.Services
                 SET PaymentId = @PaymentId, OrderId = @OrderId,
                     Amount = @Amount, PaymentDate = @PaymentDate,
                     PaymentMethod = @PaymentMethod
+                WHERE PaymentId = @PaymentId
                 RETURNING *";
                 var updatedPayment = await connection.QueryFirstOrDefaultAsync<Payment>(sqlQuery, payment);
                 if (updatedPayment == null)

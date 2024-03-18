@@ -53,9 +53,10 @@ namespace NotificationService.Services
             {
                 var sqlQuery = @"
                     UPDATE notifications
-                    SET NotificationId = @NotificationId, UserId = @UserId,
+                    SET UserId = @UserId,
                         Title = @Title, Message = @Message, 
                         CreatedAt = @CreatedAt, SentAt = @SentAt
+                    WHERE NotificationId = @NotificationId
                     RETURNING *";
                 var updatedNotification = await connection.QueryFirstOrDefaultAsync<Notification>(sqlQuery, notification);
                 if (updatedNotification == null)

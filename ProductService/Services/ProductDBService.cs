@@ -37,8 +37,8 @@ namespace ProductService.Services
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
                 string sqlQuery = @"
-                    INSERT INTO products (ProductId, ProductName, Description, Price, CategoryId, CreatedAt)
-                    VALUES (@ProductId, @ProductName, @Description, @Price, @CategoryId, @CreatedAt)
+                    INSERT INTO products (ProductName, Description, Price, CategoryId, CreatedAt)
+                    VALUES (@ProductName, @Description, @Price, @CategoryId, @CreatedAt)
                     RETURNING *";
                 var createdProduct = await connection.QueryFirstOrDefaultAsync<Product>(sqlQuery, product);
                 if (createdProduct == null)
@@ -53,9 +53,10 @@ namespace ProductService.Services
             {
                 string sqlQuery = @"
                     UPDATE products 
-                    SET ProductId = @ProductId, ProductName = @ProductName,
+                    SET ProductName = @ProductName,
                         Description = @Description, Price = @Price,
-                        CategoryId = @CategoryId, CreatedAt = @CreatedAt
+                        CategoryId = @CategoryId
+                    WHERE ProductId = @ProductId
                     RETURNING *";
                 var updatedProduct = await connection.QueryFirstOrDefaultAsync<Product>(sqlQuery, product);
                 if (updatedProduct == null)
