@@ -29,7 +29,7 @@ namespace UserService.Services
         {
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
-                var user = await connection.QueryFirstOrDefaultAsync<User>("SELECT * FROM users WHERE id = @id", new { id });
+                var user = await connection.QueryFirstOrDefaultAsync<User>("SELECT * FROM users WHERE userId = @id", new { id });
                 return user;
             }
         }
@@ -50,6 +50,8 @@ namespace UserService.Services
         }
         public async Task<User> UpdateAsync(User user)
         {
+            if (GetByIdAsync(user.UserId) == null)
+                throw new Exception("User not found");
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
                 string sqlQuery = @"
@@ -65,6 +67,8 @@ namespace UserService.Services
         }
         public async Task<User> DeleteAsync(int id)
         {
+            if (GetByIdAsync(id) == null)
+                throw new Exception("User not found");
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
                 string sqlQuery = @"
