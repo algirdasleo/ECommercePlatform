@@ -37,8 +37,8 @@ namespace InventoryService.Services
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
                 var sqlQuery = @"
-                    INSERT INTO inventoryItems (InventoryItemId, ProductId, QuantityAvailable)
-                    VALUES (@InventoryItemId, @ProductId, @QuantityAvailable)
+                    INSERT INTO inventoryItems (ProductId, QuantityAvailable)
+                    VALUES (@ProductId, @QuantityAvailable)
                     RETURNING *";
                 var createdInventoryItem = await connection.QueryFirstOrDefaultAsync<InventoryItem>(sqlQuery, inventoryItem);
                 if (createdInventoryItem == null)

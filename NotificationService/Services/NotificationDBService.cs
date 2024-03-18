@@ -37,8 +37,8 @@ namespace NotificationService.Services
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
                 var sqlQuery = @"
-                    INSERT INTO notifications (NotificationId, UserId, Title, Message, CreatedAt, SentAt)
-                    VALUES (@NotificationId, @UserId, @Message, @Title, @CreatedAt, @SentAt)
+                    INSERT INTO notifications (UserId, Title, Message, CreatedAt, SentAt)
+                    VALUES (@UserId, @Message, @Title, @CreatedAt, @SentAt)
                     RETURNING *";
                 var createdNotification = await connection.QueryFirstOrDefaultAsync<Notification>(sqlQuery, notification);
                 if (createdNotification == null)

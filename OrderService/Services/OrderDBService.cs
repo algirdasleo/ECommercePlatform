@@ -37,8 +37,8 @@ namespace OrderService.Services
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
                 var sqlQuery = @"
-                    INSERT INTO orders (OrderId, UserId, OrderDate, TotalAmount, OrderStatus)
-                    VALUES (@OrderId, @UserId, @OrderDate, @TotalAmount, @OrderStatus)
+                    INSERT INTO orders (UserId, OrderDate, TotalAmount, OrderStatus)
+                    VALUES (@UserId, @OrderDate, @TotalAmount, @OrderStatus)
                     RETURNING *";
                 var createdOrder = await connection.QueryFirstOrDefaultAsync<Order>(sqlQuery, order);
                 if (createdOrder == null)

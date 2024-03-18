@@ -37,8 +37,8 @@ namespace PaymentService.Services
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
                 var sqlQuery = @"
-                    INSERT INTO payments (PaymentId, OrderId, Amount, PaymentDate, PaymentMethod)
-                    VALUES (@PaymentId, @OrderId, @Amount, @PaymentDate, @PaymentMethod);
+                    INSERT INTO payments (OrderId, Amount, PaymentDate, PaymentMethod)
+                    VALUES (@OrderId, @Amount, @PaymentDate, @PaymentMethod)
                     RETURNING *";
                 var createdPayment = await connection.QueryFirstOrDefaultAsync<Payment>(sqlQuery, payment);
                 if (createdPayment == null)
@@ -53,7 +53,7 @@ namespace PaymentService.Services
             {
                 var sqlQuery = @"
                 UPDATE payments
-                SET PaymentId = @PaymentId, OrderId = @OrderId,
+                SET OrderId = @OrderId,
                     Amount = @Amount, PaymentDate = @PaymentDate,
                     PaymentMethod = @PaymentMethod
                 WHERE PaymentId = @PaymentId
