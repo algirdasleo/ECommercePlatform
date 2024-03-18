@@ -1,8 +1,6 @@
 using SharedLibrary.Interfaces;
 using Dapper;
-using Npgsql;
 using UserService.Models;
-using System.Data.Common;
 using SharedLibrary.Services;
 
 namespace UserService.Services
