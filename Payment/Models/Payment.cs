@@ -1,6 +1,6 @@
-namespace PaymentService.Models
+namespace Payment.Models
 {
-    public class Payment
+    public class PaymentItem
     {
         public int PaymentId { get; set; }
         public int OrderId { get; set; }

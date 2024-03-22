@@ -1,17 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
-using PaymentService.Models;
-using PaymentService.Services;
+using Payment.Models;
+using Payment.Services;
 using SharedLibrary.Interfaces;
 
-namespace PaymentService.Controllers
+namespace Payment.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     public class PaymentController : ControllerBase
     {
-        private readonly IDBService<Payment> _paymentService;
+        private readonly IDBService<PaymentItem> _paymentService;
 
-        public PaymentController(IDBService<Payment> paymentService)
+        public PaymentController(IDBService<PaymentItem> paymentService)
         {
             _paymentService = paymentService;
         }
@@ -33,7 +33,7 @@ namespace PaymentService.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePayment(Payment payment){
+        public async Task<IActionResult> CreatePayment(PaymentItem payment){
             var paymentId = (await _paymentService.CreateAsync(payment)).PaymentId;
             payment.PaymentId = paymentId;
             var actionName = nameof(GetPaymentById);
@@ -42,7 +42,7 @@ namespace PaymentService.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdatePayment(Payment payment){
+        public async Task<IActionResult> UpdatePayment(PaymentItem payment){
             var updatedPayment = await _paymentService.UpdateAsync(payment);
             return Ok(updatedPayment);
         }

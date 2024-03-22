@@ -1,7 +1,7 @@
-using PaymentService.Services;
+using Payment.Services;
 using SharedLibrary.Interfaces;
 using SharedLibrary.Services;
-using PaymentService.Models;
+using Payment.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -18,7 +18,7 @@ if (string.IsNullOrEmpty(connectionString))
 }
 builder.Services.AddScoped<DBConnectionFactory>(_ => new DBConnectionFactory(connectionString));
 
-builder.Services.AddScoped<IDBService<Payment>, PaymentDBService>();
+builder.Services.AddScoped<IDBService<PaymentItem>, PaymentDBService>();
 
 var app = builder.Build();
 

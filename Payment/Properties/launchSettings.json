@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "PaymentService": {
+    "Payment": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
