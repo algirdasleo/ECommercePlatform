@@ -1,11 +1,11 @@
 using SharedLibrary.Interfaces;
 using SharedLibrary.Services;
-using OrderService.Models;
+using Order.Models;
 using Dapper;
 
-namespace OrderService.Services
+namespace Order.Services
 {
-    public class OrderDBService : IDBService<Order>
+    public class OrderDBService : IDBService<OrderItem>
     {
         private readonly DBConnectionFactory _dbConnectionFactory;
 
@@ -14,25 +14,25 @@ namespace OrderService.Services
             _dbConnectionFactory = dbConnectionFactory;
         }
         
-        public async Task<List<Order>> GetAllAsync()
+        public async Task<List<OrderItem>> GetAllAsync()
         {
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
-                var lists = await connection.QueryAsync<Order>("SELECT * FROM orders");
+                var lists = await connection.QueryAsync<OrderItem>("SELECT * FROM orders");
                 return lists.ToList();
             }
         }
 
-        public async Task<Order?> GetByIdAsync(int id)
+        public async Task<OrderItem?> GetByIdAsync(int id)
         {
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
-                var order = await connection.QueryFirstOrDefaultAsync<Order>("SELECT * FROM orders WHERE orderId = @id", new { id });
+                var order = await connection.QueryFirstOrDefaultAsync<OrderItem>("SELECT * FROM orders WHERE orderId = @id", new { id });
                 return order;
             }
         }
 
-        public async Task<Order> CreateAsync(Order order)
+        public async Task<OrderItem> CreateAsync(OrderItem order)
         {
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
@@ -40,14 +40,14 @@ namespace OrderService.Services
                     INSERT INTO orders (UserId, OrderDate, TotalAmount, OrderStatus)
                     VALUES (@UserId, @OrderDate, @TotalAmount, @OrderStatus)
                     RETURNING *";
-                var createdOrder = await connection.QueryFirstOrDefaultAsync<Order>(sqlQuery, order);
+                var createdOrder = await connection.QueryFirstOrDefaultAsync<OrderItem>(sqlQuery, order);
                 if (createdOrder == null)
-                    throw new Exception("Order not created");
+                    throw new Exception("OrderItem not created");
                 return createdOrder;
             }
         }
 
-        public async Task<Order> UpdateAsync(Order order)
+        public async Task<OrderItem> UpdateAsync(OrderItem order)
         {
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
@@ -58,14 +58,14 @@ namespace OrderService.Services
                         OrderStatus = @OrderStatus
                     WHERE OrderId = @OrderId
                     RETURNING *";
-                var updatedOrder = await connection.QueryFirstOrDefaultAsync<Order>(sqlQuery, order);
+                var updatedOrder = await connection.QueryFirstOrDefaultAsync<OrderItem>(sqlQuery, order);
                 if (updatedOrder == null)
-                    throw new Exception("Order not updated");
+                    throw new Exception("OrderItem not updated");
                 return updatedOrder;
             }
         }
 
-        public async Task<Order> DeleteAsync(int id)
+        public async Task<OrderItem> DeleteAsync(int id)
         {
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
@@ -73,9 +73,9 @@ namespace OrderService.Services
                     DELETE FROM orders
                     WHERE orderId = @id
                     RETURNING *";
-                var deletedOrder = await connection.QueryFirstOrDefaultAsync<Order>(sqlQuery, new { id });
+                var deletedOrder = await connection.QueryFirstOrDefaultAsync<OrderItem>(sqlQuery, new { id });
                 if (deletedOrder == null)
-                    throw new Exception("Order not deleted");
+                    throw new Exception("OrderItem not deleted");
                 return deletedOrder;
             }
         }

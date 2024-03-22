@@ -1,7 +1,7 @@
 using SharedLibrary.Interfaces;
 using SharedLibrary.Services;
-using OrderService.Models;
-using OrderService.Services;
+using Order.Models;
+using Order.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +18,7 @@ if (string.IsNullOrEmpty(connectionString))
     throw new Exception("Default Connection is not set");
 }
 builder.Services.AddScoped<DBConnectionFactory>(_ => new DBConnectionFactory(connectionString));
-builder.Services.AddScoped<IDBService<Order>, OrderDBService>();
+builder.Services.AddScoped<IDBService<OrderItem>, OrderDBService>();
 
 var app = builder.Build();
 

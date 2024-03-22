@@ -1,17 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
-using OrderService.Models;
-using OrderService.Services;
+using Order.Models;
+using Order.Services;
 using SharedLibrary.Interfaces;
 
-namespace OrderService.Controllers
+namespace Order.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     public class OrderController : ControllerBase
     {
-        private readonly IDBService<Order> _orderService;
+        private readonly IDBService<OrderItem> _orderService;
 
-        public OrderController(IDBService<Order> orderService)
+        public OrderController(IDBService<OrderItem> orderService)
         {
             _orderService = orderService;
         }
@@ -33,7 +33,7 @@ namespace OrderService.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateOrder(Order order){
+        public async Task<IActionResult> CreateOrder(OrderItem order){
             var orderId = (await _orderService.CreateAsync(order)).OrderId;
             order.OrderId = orderId;
             var actionName = nameof(GetOrderById);
@@ -42,7 +42,7 @@ namespace OrderService.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateOrder(Order order){
+        public async Task<IActionResult> UpdateOrder(OrderItem order){
             var updatedOrder = await _orderService.UpdateAsync(order);
             return Ok(updatedOrder);
         }

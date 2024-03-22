@@ -1,6 +1,6 @@
-namespace OrderService.Models
+namespace Order.Models
 {
-    public class Order
+    public class OrderItem
     {
         public int OrderId { get; set; }
         public int UserId { get; set; } // Foreign key -> UserService.Models.User
