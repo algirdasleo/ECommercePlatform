@@ -5,14 +5,14 @@ using SharedLibrary.Interfaces;
 
 namespace Notification.Services
 {
-    public class NotificationService
+    public class NotificationService : INotificationService
     {
         private readonly IHubContext<NotificationHub> _hubContext;
-        private readonly IDBService<NotificationItem> _notificationService;
+        private readonly IDBService<NotificationItem> _dbService;
         public NotificationService(IHubContext<NotificationHub> hubContext, IDBService<NotificationItem> notificationService)
         {
             _hubContext = hubContext;
-            _notificationService = notificationService;
+            _dbService = notificationService;
         }
 
         public async Task SendNotificationToUser(string userId, string message)
@@ -25,38 +25,38 @@ namespace Notification.Services
             await _hubContext.Clients.All.SendAsync("ReceiveNotification", message);
         }
 
-        public async Task<List<NotificationItem>> GetAllNotifications()
+        public async Task<List<NotificationItem>> GetAllAsync()
         {
-            return await _notificationService.GetAllAsync();
+            return await _dbService.GetAllAsync();
         }
 
-        public async Task<NotificationItem?> GetNotificationById(int id)
+        public async Task<NotificationItem?> GetByIdAsync(int id)
         {
-            return await _notificationService.GetByIdAsync(id);
+            return await _dbService.GetByIdAsync(id);
         }
 
-        public async Task<NotificationItem> CreateNotification(NotificationItem notification)
+        public async Task<NotificationItem> CreateAsync(NotificationItem notification)
         {
-            return await _notificationService.CreateAsync(notification);
+            return await _dbService.CreateAsync(notification);
         }
 
-        public async Task<NotificationItem> UpdateNotification(NotificationItem notification)
+        public async Task<NotificationItem> UpdateAsync(NotificationItem notification)
         {
-            return await _notificationService.UpdateAsync(notification);
+            return await _dbService.UpdateAsync(notification);
         }
 
-        public async Task<NotificationItem> DeleteNotification(int id)
+        public async Task<NotificationItem> DeleteAsync(int id)
         {
-            return await _notificationService.DeleteAsync(id);
+            return await _dbService.DeleteAsync(id);
         }
 
         public async Task<NotificationItem> MarkNotificationAsSent(int id)
         {
-            var notification = await _notificationService.GetByIdAsync(id);
+            var notification = await _dbService.GetByIdAsync(id);
             if (notification == null)
                 throw new Exception("Notification not found");
             notification.SentAt = DateTime.Now;
-            return await _notificationService.UpdateAsync(notification);
+            return await _dbService.UpdateAsync(notification);
         }
     }
 }
