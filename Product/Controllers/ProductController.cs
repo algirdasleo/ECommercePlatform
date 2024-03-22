@@ -1,17 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
-using ProductService.Models;
-using ProductService.Services;
+using Product.Models;
+using Product.Services;
 using SharedLibrary.Interfaces;
 
-namespace ProductService.Controllers
+namespace Product.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     public class ProductController : ControllerBase
     {
-        private readonly IDBService<Product> _productService;
+        private readonly IDBService<ProductItem> _productService;
 
-        public ProductController(IDBService<Product> productService)
+        public ProductController(IDBService<ProductItem> productService)
         {
             _productService = productService;
         }
@@ -33,7 +33,7 @@ namespace ProductService.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProduct(Product product){
+        public async Task<IActionResult> CreateProduct(ProductItem product){
             var productId = (await _productService.CreateAsync(product)).ProductId;
             product.ProductId = productId;
             var actionName = nameof(GetProductById);
@@ -42,7 +42,7 @@ namespace ProductService.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateProduct(Product product){
+        public async Task<IActionResult> UpdateProduct(ProductItem product){
             var updatedProduct = await _productService.UpdateAsync(product);
             return Ok(updatedProduct);
         }

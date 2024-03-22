@@ -1,7 +1,7 @@
-using ProductService.Models;
+using Product.Models;
 using SharedLibrary.Interfaces;
 using SharedLibrary.Services;
-using ProductService.Services;
+using Product.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -17,7 +17,7 @@ if (string.IsNullOrEmpty(connectionString))
     throw new Exception("Default Connection is not set");
 }
 builder.Services.AddScoped<DBConnectionFactory>(_ => new DBConnectionFactory(connectionString));
-builder.Services.AddScoped<IDBService<Product>, ProductDBService>();
+builder.Services.AddScoped<IDBService<ProductItem>, ProductDBService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -1,6 +1,6 @@
-namespace ProductService.Models
+namespace Product.Models
 {
-    public class Product
+    public class ProductItem
     {
         public int ProductId { get; set;}
         public string ProductName { get; set; } = string.Empty;
