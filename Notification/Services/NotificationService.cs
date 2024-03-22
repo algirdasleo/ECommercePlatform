@@ -9,7 +9,6 @@ namespace Notification.Services
     {
         private readonly IHubContext<NotificationHub> _hubContext;
         private readonly IDBService<NotificationItem> _notificationService;
-
         public NotificationService(IHubContext<NotificationHub> hubContext, IDBService<NotificationItem> notificationService)
         {
             _hubContext = hubContext;
