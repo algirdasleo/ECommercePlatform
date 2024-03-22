@@ -11,8 +11,8 @@ namespace Notification.Controllers
     [Route("api/[controller]")]
     public class NotificationController : ControllerBase
     {
-        private readonly IDBService<NotificationItem> _notificationService;
-        public NotificationController(IDBService<NotificationItem> notificationService)
+        private readonly INotificationService _notificationService;
+        public NotificationController(INotificationService notificationService)
         {
             _notificationService = notificationService;
         }
@@ -52,6 +52,12 @@ namespace Notification.Controllers
         public async Task<IActionResult> DeleteNotification(int id){
             var deletedNotification = await _notificationService.DeleteAsync(id);
             return Ok(deletedNotification);
+        }
+
+        [HttpPut("{id}/mark-as-sent")]
+        public async Task<IActionResult> MarkNotificationAsSent(int id){
+            var updatedNotification = await _notificationService.MarkNotificationAsSent(id);
+            return Ok(updatedNotification);
         }
     }
 }
