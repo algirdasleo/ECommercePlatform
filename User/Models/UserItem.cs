@@ -1,8 +1,8 @@
 using Npgsql.TypeMapping;
 
-namespace UserService.Models
+namespace User.Models
 {
-    public class User
+    public class UserItem
     {
         public int UserId { get; set; }
         public string UserName { get; set; } = string.Empty;

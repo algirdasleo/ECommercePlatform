@@ -1,7 +1,7 @@
 using SharedLibrary.Interfaces;
 using SharedLibrary.Services;
-using UserService.Services;
-using UserService.Models;
+using User.Services;
+using User.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +13,7 @@ if (string.IsNullOrEmpty(connectionString))
 builder.Services.AddScoped<DBConnectionFactory>(_ => new DBConnectionFactory(connectionString));
 
 
-builder.Services.AddScoped<IDBService<User>, UserDBService>();
+builder.Services.AddScoped<IDBService<UserItem>, UserDBService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
