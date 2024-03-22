@@ -20,7 +20,7 @@ if (string.IsNullOrEmpty(connectionString))
 }
 builder.Services.AddScoped<DBConnectionFactory>(_ => new DBConnectionFactory(connectionString));
 builder.Services.AddScoped<IDBService<NotificationItem>, NotificationDBService>();
-builder.Services.AddScoped<NotificationService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
 
 var app = builder.Build();
 
