@@ -1,7 +1,7 @@
 using SharedLibrary.Interfaces;
 using SharedLibrary.Services;
-using InventoryService.Models;
-using InventoryService.Services;
+using Inventory.Models;
+using Inventory.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

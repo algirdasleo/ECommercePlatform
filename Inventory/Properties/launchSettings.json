@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "InventoryService": {
+    "Inventory": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

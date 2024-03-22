@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using InventoryService.Models;
-using InventoryService.Services;
+using Inventory.Models;
+using Inventory.Services;
 using SharedLibrary.Interfaces;
 
-namespace InventoryService.Controllers
+namespace Inventory.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

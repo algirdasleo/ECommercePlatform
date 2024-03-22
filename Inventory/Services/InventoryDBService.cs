@@ -1,9 +1,9 @@
 using SharedLibrary.Interfaces;
 using SharedLibrary.Services;
-using InventoryService.Models;
+using Inventory.Models;
 using Dapper;
 
-namespace InventoryService.Services
+namespace Inventory.Services
 {
     public class InventoryDBService : IDBService<InventoryItem>
     {

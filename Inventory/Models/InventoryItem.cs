@@ -1,4 +1,4 @@
-namespace InventoryService.Models
+namespace Inventory.Models
 {
     public class InventoryItem
     {
