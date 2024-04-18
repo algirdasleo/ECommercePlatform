@@ -2,6 +2,7 @@ using SharedLibrary.Interfaces;
 using SharedLibrary.Services;
 using Product.Models;
 using Dapper;
+using SharedLibrary.Helpers;
 
 namespace Product.Services
 {
@@ -16,31 +17,30 @@ namespace Product.Services
         
         public async Task<List<ProductItem>> GetAllAsync()
         {
+            var sql = ResourceHelper.GetQuery("ProductGetAllAsync");
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
-                var products = await connection.QueryAsync<ProductItem>("SELECT * FROM products");
+                var products = await connection.QueryAsync<ProductItem>(sql);
                 return products.ToList();
             }
         }
 
         public async Task<ProductItem?> GetByIdAsync(int id)
         {
+            var sql = ResourceHelper.GetQuery("ProductGetByIdAsync");
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
-                var product = await connection.QueryFirstOrDefaultAsync<ProductItem>("SELECT * FROM products WHERE ProductId = @id", new { id });
+                var product = await connection.QueryFirstOrDefaultAsync<ProductItem>(sql, new { id });
                 return product;
             }
         }
 
         public async Task<ProductItem> CreateAsync(ProductItem product)
         {
+            var sql = ResourceHelper.GetQuery("ProductCreateAsync");
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
-                string sqlQuery = @"
-                    INSERT INTO products (ProductName, Description, Price, CategoryId, CreatedAt)
-                    VALUES (@ProductName, @Description, @Price, @CategoryId, @CreatedAt)
-                    RETURNING *";
-                var createdProduct = await connection.QueryFirstOrDefaultAsync<ProductItem>(sqlQuery, product);
+                var createdProduct = await connection.QueryFirstOrDefaultAsync<ProductItem>(sql, product);
                 if (createdProduct == null)
                     throw new Exception("ProductItem not created");
                 return createdProduct;
@@ -49,16 +49,10 @@ namespace Product.Services
 
         public async Task<ProductItem> UpdateAsync(ProductItem product)
         {
+            var sql = ResourceHelper.GetQuery("ProductUpdateAsync");
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
-                string sqlQuery = @"
-                    UPDATE products 
-                    SET ProductName = @ProductName,
-                        Description = @Description, Price = @Price,
-                        CategoryId = @CategoryId
-                    WHERE ProductId = @ProductId
-                    RETURNING *";
-                var updatedProduct = await connection.QueryFirstOrDefaultAsync<ProductItem>(sqlQuery, product);
+                var updatedProduct = await connection.QueryFirstOrDefaultAsync<ProductItem>(sql, product);
                 if (updatedProduct == null)
                     throw new Exception("ProductItem not updated");
                 return updatedProduct;
@@ -67,13 +61,10 @@ namespace Product.Services
 
         public async Task<ProductItem> DeleteAsync(int id)
         {
+            var sql = ResourceHelper.GetQuery("ProductDeleteAsync");
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
-                string sqlQuery = @"
-                    DELETE FROM products
-                    WHERE ProductId = @id
-                    RETURNING *";
-                var deletedProduct = await connection.QueryFirstOrDefaultAsync<ProductItem>(sqlQuery, new { id });
+                var deletedProduct = await connection.QueryFirstOrDefaultAsync<ProductItem>(sql, new { id });
                 if (deletedProduct == null)
                     throw new Exception("ProductItem not deleted");
                 return deletedProduct;

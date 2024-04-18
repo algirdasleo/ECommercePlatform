@@ -2,6 +2,7 @@ using SharedLibrary.Interfaces;
 using SharedLibrary.Services;
 using Payment.Models;
 using Dapper;
+using SharedLibrary.Helpers;
 
 namespace Payment.Services
 {
@@ -16,31 +17,30 @@ namespace Payment.Services
 
         public async Task<List<PaymentItem>> GetAllAsync()
         {
+            var sql = ResourceHelper.GetQuery("PaymentGetAllAsync");
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
-                var payments = await connection.QueryAsync<PaymentItem>("SELECT * FROM payments");
+                var payments = await connection.QueryAsync<PaymentItem>(sql);
                 return payments.ToList();
             }
         }
 
         public async Task<PaymentItem?> GetByIdAsync(int id)
         {
+            var sql = ResourceHelper.GetQuery("PaymentGetByIdAsync");
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
-                var payment = await connection.QueryFirstOrDefaultAsync<PaymentItem>("SELECT * FROM payments WHERE paymentId = @id", new { id });
+                var payment = await connection.QueryFirstOrDefaultAsync<PaymentItem>(sql, new { id });
                 return payment;
             }
         }
 
         public async Task<PaymentItem> CreateAsync(PaymentItem payment)
         {
+            var sql = ResourceHelper.GetQuery("PaymentCreateAsync");
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
-                var sqlQuery = @"
-                    INSERT INTO payments (OrderId, Amount, PaymentDate, PaymentMethod)
-                    VALUES (@OrderId, @Amount, @PaymentDate, @PaymentMethod)
-                    RETURNING *";
-                var createdPayment = await connection.QueryFirstOrDefaultAsync<PaymentItem>(sqlQuery, payment);
+                var createdPayment = await connection.QueryFirstOrDefaultAsync<PaymentItem>(sql, payment);
                 if (createdPayment == null)
                     throw new Exception("PaymentItem not created");
                 return createdPayment;
@@ -49,16 +49,10 @@ namespace Payment.Services
 
         public async Task<PaymentItem> UpdateAsync(PaymentItem payment)
         {
+            var sql = ResourceHelper.GetQuery("PaymentUpdateAsync");
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
-                var sqlQuery = @"
-                UPDATE payments
-                SET OrderId = @OrderId,
-                    Amount = @Amount, PaymentDate = @PaymentDate,
-                    PaymentMethod = @PaymentMethod
-                WHERE PaymentId = @PaymentId
-                RETURNING *";
-                var updatedPayment = await connection.QueryFirstOrDefaultAsync<PaymentItem>(sqlQuery, payment);
+                var updatedPayment = await connection.QueryFirstOrDefaultAsync<PaymentItem>(sql, payment);
                 if (updatedPayment == null)
                     throw new Exception("PaymentItem not updated");
                 return updatedPayment;
@@ -67,12 +61,10 @@ namespace Payment.Services
 
         public async Task<PaymentItem> DeleteAsync(int id)
         {
+            var sql = ResourceHelper.GetQuery("PaymentDeleteAsync");
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
-                var sqlQuery = @"
-                DELETE FROM payments
-                WHERE PaymentId = @id";
-                var deletedProduct = await connection.QueryFirstOrDefaultAsync<PaymentItem>(sqlQuery, new { id });
+                var deletedProduct = await connection.QueryFirstOrDefaultAsync<PaymentItem>(sql, new { id });
                 if (deletedProduct == null)
                     throw new Exception("PaymentItem not updated");
                 return deletedProduct;

@@ -1,5 +1,6 @@
 using SharedLibrary.Interfaces;
 using SharedLibrary.Services;
+using SharedLibrary.Helpers;
 using Inventory.Models;
 using Dapper;
 
@@ -16,31 +17,30 @@ namespace Inventory.Services
 
         public async Task<List<InventoryItem>> GetAllAsync()
         {
+            string sql = ResourceHelper.GetQuery("InventoryGetAllAsync");
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
-                var inventoryItems = await connection.QueryAsync<InventoryItem>("SELECT * FROM inventoryItems");
+                var inventoryItems = await connection.QueryAsync<InventoryItem>(sql);
                 return inventoryItems.ToList();
             }
         }
 
         public async Task<InventoryItem?> GetByIdAsync(int id)
         {
+            string sql = ResourceHelper.GetQuery("InventoryGetByIdAsync");
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
-                var inventoryItem = await connection.QueryFirstOrDefaultAsync<InventoryItem>("SELECT * FROM inventoryItems WHERE inventoryItemId = @id", new { id });
+                var inventoryItem = await connection.QueryFirstOrDefaultAsync<InventoryItem>(sql, new { id });
                 return inventoryItem;
             }
         }
 
         public async Task<InventoryItem> CreateAsync(InventoryItem inventoryItem)
         {
+            var sql = ResourceHelper.GetQuery("InventoryCreateAsync");
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
-                var sqlQuery = @"
-                    INSERT INTO inventoryItems (ProductId, QuantityAvailable)
-                    VALUES (@ProductId, @QuantityAvailable)
-                    RETURNING *";
-                var createdInventoryItem = await connection.QueryFirstOrDefaultAsync<InventoryItem>(sqlQuery, inventoryItem);
+                var createdInventoryItem = await connection.QueryFirstOrDefaultAsync<InventoryItem>(sql, inventoryItem);
                 if (createdInventoryItem == null)
                     throw new Exception("InventoryItem not created");
                 return createdInventoryItem;
@@ -49,15 +49,10 @@ namespace Inventory.Services
 
         public async Task<InventoryItem> UpdateAsync(InventoryItem inventoryItem)
         {
+            var sql = ResourceHelper.GetQuery("InventoryUpdateAsync");
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
-                var sqlQuery = @"
-                    UPDATE inventoryItems
-                    SET ProductId = @ProductId,
-                        QuantityAvailable = @QuantityAvailable
-                    WHERE InventoryItemId = @InventoryItemId
-                    RETURNING *";
-                var updatedInventoryItem = await connection.QueryFirstOrDefaultAsync<InventoryItem>(sqlQuery, inventoryItem);
+                var updatedInventoryItem = await connection.QueryFirstOrDefaultAsync<InventoryItem>(sql, inventoryItem);
                 if (updatedInventoryItem == null)
                     throw new Exception("InventoryItem not updated");
                 return updatedInventoryItem;
@@ -66,13 +61,10 @@ namespace Inventory.Services
 
         public async Task<InventoryItem> DeleteAsync(int id)
         {
+            var sql = ResourceHelper.GetQuery("InventoryDeleteAsync");
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
-                var sqlQuery = @"
-                    DELETE FROM inventoryItems
-                    WHERE inventoryItemId = @id
-                    RETURNING *";
-                var deletedInventoryItem = await connection.QueryFirstOrDefaultAsync<InventoryItem>(sqlQuery, new { id });
+                var deletedInventoryItem = await connection.QueryFirstOrDefaultAsync<InventoryItem>(sql, new { id });
                 if (deletedInventoryItem == null)
                     throw new Exception("InventoryItem not deleted");
                 return deletedInventoryItem;

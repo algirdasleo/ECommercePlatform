@@ -2,6 +2,7 @@ using SharedLibrary.Interfaces;
 using SharedLibrary.Services;
 using Order.Models;
 using Dapper;
+using SharedLibrary.Helpers;
 
 namespace Order.Services
 {
@@ -16,31 +17,30 @@ namespace Order.Services
         
         public async Task<List<OrderItem>> GetAllAsync()
         {
+            var sql = ResourceHelper.GetQuery("OrderGetAllAsync");
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
-                var lists = await connection.QueryAsync<OrderItem>("SELECT * FROM orders");
+                var lists = await connection.QueryAsync<OrderItem>(sql);
                 return lists.ToList();
             }
         }
 
         public async Task<OrderItem?> GetByIdAsync(int id)
         {
+            var sql = ResourceHelper.GetQuery("OrderGetByIdAsync");
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
-                var order = await connection.QueryFirstOrDefaultAsync<OrderItem>("SELECT * FROM orders WHERE orderId = @id", new { id });
+                var order = await connection.QueryFirstOrDefaultAsync<OrderItem>(sql, new { id });
                 return order;
             }
         }
 
         public async Task<OrderItem> CreateAsync(OrderItem order)
         {
+            var sql = ResourceHelper.GetQuery("OrderCreateAsync");
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
-                var sqlQuery = @"
-                    INSERT INTO orders (UserId, OrderDate, TotalAmount, OrderStatus)
-                    VALUES (@UserId, @OrderDate, @TotalAmount, @OrderStatus)
-                    RETURNING *";
-                var createdOrder = await connection.QueryFirstOrDefaultAsync<OrderItem>(sqlQuery, order);
+                var createdOrder = await connection.QueryFirstOrDefaultAsync<OrderItem>(sql, order);
                 if (createdOrder == null)
                     throw new Exception("OrderItem not created");
                 return createdOrder;
@@ -49,16 +49,10 @@ namespace Order.Services
 
         public async Task<OrderItem> UpdateAsync(OrderItem order)
         {
+            var sql = ResourceHelper.GetQuery("OrderUpdateAsync");
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
-                var sqlQuery = @"
-                    UPDATE orders
-                    SET UserId = @UserId, 
-                        OrderDate = @OrderDate, TotalAmount = @TotalAmount, 
-                        OrderStatus = @OrderStatus
-                    WHERE OrderId = @OrderId
-                    RETURNING *";
-                var updatedOrder = await connection.QueryFirstOrDefaultAsync<OrderItem>(sqlQuery, order);
+                var updatedOrder = await connection.QueryFirstOrDefaultAsync<OrderItem>(sql, order);
                 if (updatedOrder == null)
                     throw new Exception("OrderItem not updated");
                 return updatedOrder;
@@ -67,13 +61,10 @@ namespace Order.Services
 
         public async Task<OrderItem> DeleteAsync(int id)
         {
+            var sql = ResourceHelper.GetQuery("OrderDeleteAsync");
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
-                var sqlQuery = @"
-                    DELETE FROM orders
-                    WHERE orderId = @id
-                    RETURNING *";
-                var deletedOrder = await connection.QueryFirstOrDefaultAsync<OrderItem>(sqlQuery, new { id });
+                var deletedOrder = await connection.QueryFirstOrDefaultAsync<OrderItem>(sql, new { id });
                 if (deletedOrder == null)
                     throw new Exception("OrderItem not deleted");
                 return deletedOrder;

@@ -2,6 +2,7 @@ using SharedLibrary.Interfaces;
 using SharedLibrary.Services;
 using Notification.Models;
 using Dapper;
+using SharedLibrary.Helpers;
 
 namespace Notification.Services
 {
@@ -16,31 +17,30 @@ namespace Notification.Services
 
         public async Task<List<NotificationItem>> GetAllAsync()
         {
+            var sql = ResourceHelper.GetQuery("NotificationGetAllAsync");
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
-                var notifications = await connection.QueryAsync<NotificationItem>("SELECT * FROM notifications");
+                var notifications = await connection.QueryAsync<NotificationItem>(sql);
                 return notifications.ToList();
             }
         }
 
         public async Task<NotificationItem?> GetByIdAsync(int id)
         {
+            var sql = ResourceHelper.GetQuery("NotificationGetByIdAsync");
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
-                var notification = await connection.QueryFirstOrDefaultAsync<NotificationItem>("SELECT * FROM notifications WHERE notificationId = @id", new { id });
+                var notification = await connection.QueryFirstOrDefaultAsync<NotificationItem>(sql, new { id });
                 return notification;
             }
         }
 
         public async Task<NotificationItem> CreateAsync(NotificationItem notification)
         {
+            var sql = ResourceHelper.GetQuery("NotificationCreateAsync");
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
-                var sqlQuery = @"
-                    INSERT INTO notifications (UserId, Title, Message, CreatedAt, SentAt)
-                    VALUES (@UserId, @Message, @Title, @CreatedAt, @SentAt)
-                    RETURNING *";
-                var createdNotification = await connection.QueryFirstOrDefaultAsync<NotificationItem>(sqlQuery, notification);
+                var createdNotification = await connection.QueryFirstOrDefaultAsync<NotificationItem>(sql, notification);
                 if (createdNotification == null)
                     throw new Exception("Notification not created");
                 return createdNotification;
@@ -49,16 +49,10 @@ namespace Notification.Services
 
         public async Task<NotificationItem> UpdateAsync(NotificationItem notification)
         {
+            var sql = ResourceHelper.GetQuery("NotificationUpdateAsync");
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
-                var sqlQuery = @"
-                    UPDATE notifications
-                    SET UserId = @UserId,
-                        Title = @Title, Message = @Message, 
-                        CreatedAt = @CreatedAt, SentAt = @SentAt
-                    WHERE NotificationId = @NotificationId
-                    RETURNING *";
-                var updatedNotification = await connection.QueryFirstOrDefaultAsync<NotificationItem>(sqlQuery, notification);
+                var updatedNotification = await connection.QueryFirstOrDefaultAsync<NotificationItem>(sql, notification);
                 if (updatedNotification == null)
                     throw new Exception("Notification not updated");
                 return updatedNotification;
@@ -67,10 +61,10 @@ namespace Notification.Services
 
         public async Task<NotificationItem> DeleteAsync(int id)
         {
+            var sql = ResourceHelper.GetQuery("NotificationDeleteAsync");
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
-                var sqlQuery = "DELETE FROM notifications WHERE notificationId = @id RETURNING *";
-                var deletedNotification = await connection.QueryFirstOrDefaultAsync<NotificationItem>(sqlQuery, new { id });
+                var deletedNotification = await connection.QueryFirstOrDefaultAsync<NotificationItem>(sql, new { id });
                 if (deletedNotification == null)
                     throw new Exception("Notification not deleted");
                 return deletedNotification;
