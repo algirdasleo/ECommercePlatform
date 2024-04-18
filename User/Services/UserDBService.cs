@@ -1,6 +1,7 @@
 using SharedLibrary.Interfaces;
 using Dapper;
 using User.Models;
+using SharedLibrary.Helpers;
 using SharedLibrary.Services;
 
 namespace User.Services
@@ -16,31 +17,30 @@ namespace User.Services
 
         public async Task<List<UserItem>> GetAllAsync()
         {
+            var sql = ResourceHelper.GetQuery("UserGetAllAsync");
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
-                var users = await connection.QueryAsync<UserItem>("SELECT * FROM users");
+                var users = await connection.QueryAsync<UserItem>("");
                 return users.ToList();
             }
         }
 
         public async Task<UserItem?> GetByIdAsync(int id)
         {
+            var sql = ResourceHelper.GetQuery("UserGetByIdAsync");
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
-                var user = await connection.QueryFirstOrDefaultAsync<UserItem>("SELECT * FROM users WHERE userId = @id", new { id });
+                var user = await connection.QueryFirstOrDefaultAsync<UserItem>(sql, new { id });
                 return user;
             }
         }
 
         public async Task<UserItem> CreateAsync(UserItem user)
         {
+            var sql = ResourceHelper.GetQuery("UserCreateAsync");
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
-                string sqlQuery = @"
-                    INSERT INTO users (UserName, Email, Password, RegistrationDate, UserType)
-                    VALUES (@UserName, @Email, @Password, @RegistrationDate, @UserType)
-                    RETURNING *";
-                var createdUser = await connection.QueryFirstOrDefaultAsync<UserItem>(sqlQuery, user);
+                var createdUser = await connection.QueryFirstOrDefaultAsync<UserItem>(sql, user);
                 if (createdUser == null)
                     throw new Exception("UserItem not created");
                 return createdUser;
@@ -48,15 +48,11 @@ namespace User.Services
         }
         public async Task<UserItem> UpdateAsync(UserItem user)
         {
+            var sqlQuery = ResourceHelper.GetQuery("UserUpdateAsync");
             if (GetByIdAsync(user.UserId) == null)
                 throw new Exception("UserItem not found");
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
-                string sqlQuery = @"
-                    UPDATE users
-                    SET UserName = @UserName, Email = @Email, Password = @Password, RegistrationDate = @RegistrationDate, UserType = @UserType
-                    WHERE UserId = @UserId
-                    RETURNING *";
                 var updatedUser = await connection.QueryFirstOrDefaultAsync<UserItem>(sqlQuery, user);
                 if (updatedUser == null)
                     throw new Exception("UserItem not found");
@@ -65,15 +61,13 @@ namespace User.Services
         }
         public async Task<UserItem> DeleteAsync(int id)
         {
+            var sql = ResourceHelper.GetQuery("UserDeleteAsync");
             if (GetByIdAsync(id) == null)
                 throw new Exception("UserItem not found");
             using (var connection = await _dbConnectionFactory.CreateConnectionAsync())
             {
-                string sqlQuery = @"
-                    DELETE FROM users
-                    WHERE UserId = @id
-                    RETURNING *";
-                var deletedUser = await connection.QueryFirstOrDefaultAsync<UserItem>(sqlQuery, new { id });
+
+                var deletedUser = await connection.QueryFirstOrDefaultAsync<UserItem>(sql, new { id });
                 if (deletedUser == null)
                     throw new Exception("UserItem not found");
                 return deletedUser;
