@@ -137,4 +137,104 @@
     <value>DELETE FROM inventoryItems WHERE inventoryItemId = @id RETURNING *</value>
     <comment/>
   </data>
+  <data name="NotificationGetAllAsync" xml:space="preserve">
+    <value>SELECT * FROM inventoryItems</value>
+    <comment/>
+  </data>
+  <data name="NotificationGetByIdAsync" xml:space="preserve">
+    <value>SELECT * FROM inventoryItems WHERE inventoryItemId = @id</value>
+    <comment/>
+  </data>
+  <data name="NotificationCreateAsync" xml:space="preserve">
+    <value>INSERT INTO inventoryItems (ProductId, QuantityAvailable) VALUES (@ProductId, @QuantityAvailable) RETURNING *</value>
+    <comment/>
+  </data>
+  <data name="NotificationUpdateAsync" xml:space="preserve">
+    <value>UPDATE inventoryItems SET ProductId = @ProductId, QuantityAvailable = @QuantityAvailable WHERE InventoryItemId = @InventoryItemId RETURNING *</value>
+    <comment/>
+  </data>
+  <data name="NotificationDeleteAsync" xml:space="preserve">
+    <value>DELETE FROM inventoryItems WHERE inventoryItemId = @id RETURNING *</value>
+    <comment/>
+  </data>
+  <data name="OrderGetAllAsync" xml:space="preserve">
+    <value>SELECT * FROM orders</value>
+    <comment/>
+  </data>
+  <data name="OrderGetByIdAsync" xml:space="preserve">
+    <value>SELECT * FROM orders WHERE orderId = @id</value>
+    <comment/>
+  </data>
+  <data name="OrderCreateAsync" xml:space="preserve">
+    <value>INSERT INTO orders (UserId, OrderDate, TotalAmount, OrderStatus) VALUES (@UserId, @OrderDate, @TotalAmount, @OrderStatus) RETURNING *</value>
+    <comment/>
+  </data>
+  <data name="OrderUpdateAsync" xml:space="preserve">
+    <value>UPDATE orders SET UserId = @UserId, OrderDate = @OrderDate, TotalAmount = @TotalAmount, OrderStatus = @OrderStatus WHERE OrderId = @OrderId RETURNING *</value>
+    <comment/>
+  </data>
+  <data name="OrderDeleteAsync" xml:space="preserve">
+    <value>DELETE FROM orders WHERE orderId = @id RETURNING *</value>
+    <comment/>
+  </data>
+  <data name="PaymentGetAllAsync" xml:space="preserve">
+    <value>SELECT * FROM payments</value>
+    <comment/>
+  </data>
+  <data name="PaymentGetByIdAsync" xml:space="preserve">
+    <value>SELECT * FROM payments WHERE paymentId = @id</value>
+    <comment/>
+  </data>
+  <data name="PaymentCreateAsync" xml:space="preserve">
+    <value>INSERT INTO payments (OrderId, Amount, PaymentDate, PaymentMethod) VALUES (@OrderId, @Amount, @PaymentDate, @PaymentMethod) RETURNING *</value>
+    <comment/>
+  </data>
+  <data name="PaymentUpdateAsync" xml:space="preserve">
+    <value>UPDATE payments SET OrderId = @OrderId, Amount = @Amount, PaymentDate = @PaymentDate, PaymentMethod = @PaymentMethod WHERE PaymentId = @PaymentId RETURNING *</value>
+    <comment/>
+  </data>
+  <data name="PaymentDeleteAsync" xml:space="preserve">
+    <value>DELETE FROM payments WHERE PaymentId = @id</value>
+    <comment/>
+  </data>
+  <data name="ProductGetAllAsync" xml:space="preserve">
+    <value>SELECT * FROM products</value>
+    <comment/>
+  </data>
+  <data name="ProductGetByIdAsync" xml:space="preserve">
+    <value>SELECT * FROM products WHERE ProductId = @id</value>
+    <comment/>
+  </data>
+  <data name="ProductCreateAsync" xml:space="preserve">
+    <value>INSERT INTO products (ProductName, Description, Price, CategoryId, CreatedAt) VALUES (@ProductName, @Description, @Price, @CategoryId, @CreatedAt) RETURNING *</value>
+    <comment/>
+  </data>
+  <data name="ProductUpdateAsync" xml:space="preserve">
+    <value>UPDATE products SET ProductName = @ProductName, Description = @Description, Price = @Price, CategoryId = @CategoryId WHERE ProductId = @ProductId RETURNING *</value>
+    <comment/>
+  </data>
+  <data name="ProductDeleteAsync" xml:space="preserve">
+    <value>DELETE FROM products WHERE ProductId = @id RETURNING *</value>
+    <comment/>
+  </data>
+  <data name="UserGetAllAsync" xml:space="preserve">
+    <value>SELECT * FROM users</value>
+    <comment/>
+  </data>
+  <data name="UserGetByIdAsync" xml:space="preserve">
+    <value>SELECT * FROM users WHERE userId = @id</value>
+    <comment/>
+  </data>
+  <data name="UserCreateAsync" xml:space="preserve">
+    <value>INSERT INTO users (UserName, Email, Password, RegistrationDate, UserType) VALUES (@UserName, @Email, @Password, @RegistrationDate, @UserType) RETURNING *</value>
+    <comment/>
+  </data>
+  <data name="UserUpdateAsync" xml:space="preserve">
+    <value>UPDATE users SET UserName = @UserName, Email = @Email, Password = @Password, RegistrationDate = @RegistrationDate, UserType = @UserType WHERE UserId = @UserId RETURNING *</value>
+    <comment/>
+  </data>
+  <data name="UserDeleteAsync" xml:space="preserve">
+    <value>DELETE FROM users WHERE UserId = @id RETURNING *</value>
+    <comment/>
+  </data>
 </root>
