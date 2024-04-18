@@ -12,6 +12,7 @@ namespace SharedLibrary.Helpers
             Assembly.GetExecutingAssembly()
         );
 
+    
         public static string GetQuery(string queryName)
         {
             return resourceManager.GetString(queryName) ?? throw new Exception($"Query {queryName} not found");
