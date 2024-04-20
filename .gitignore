@@ -1,6 +1,7 @@
 .txt
 /bin
 /obj
+.tye
 
 **/appsettings.json
 **/appsettings.Development.json
