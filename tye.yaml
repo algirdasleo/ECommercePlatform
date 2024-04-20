@@ -1,0 +1,14 @@
+name: ecommerce-platform
+services:
+  - name: inventory
+    project: inventory/inventory.csproj
+  - name: notification
+    project: notification/notification.csproj
+  - name: order
+    project: order/order.csproj
+  - name: payment
+    project: payment/payment.csproj
+  - name: product
+    project: product/product.csproj
+  - name: user
+    project: user/user.csproj
