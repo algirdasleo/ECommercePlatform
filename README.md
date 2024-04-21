@@ -1,6 +1,6 @@
 # Ecommerce Platform
 
-- This project is an ecommerce platform built as a microservices architecture using **.NET 6**. It utilizes various microservices to manage different aspects of the ecommerce process, such as inventory, orders, payments.
+- This project is an ecommerce platform built using microservices architecture using **.NET 6**. It uses various microservices to manage different aspects of the ecommerce process, such as inventory, orders, payments.
     
 ## Architecture
 
@@ -60,7 +60,7 @@ To run this project, you will need:
     }
     ```
 
-    - Replace `your_username` and `your_password` with the actual username and password for your PostgreSQL instance.
+    - Replace `your_username` and `your_password` with the actual username and password for your PostgreSQL login.
 
 4. **Build the solution:**
 
