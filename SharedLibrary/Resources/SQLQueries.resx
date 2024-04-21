@@ -138,23 +138,23 @@
     <comment/>
   </data>
   <data name="NotificationGetAllAsync" xml:space="preserve">
-    <value>SELECT * FROM inventoryItems</value>
+    <value>SELECT * FROM notifications</value>
     <comment/>
   </data>
   <data name="NotificationGetByIdAsync" xml:space="preserve">
-    <value>SELECT * FROM inventoryItems WHERE inventoryItemId = @id</value>
+    <value>SELECT * FROM notifications WHERE notificationId = @id</value>
     <comment/>
   </data>
   <data name="NotificationCreateAsync" xml:space="preserve">
-    <value>INSERT INTO inventoryItems (ProductId, QuantityAvailable) VALUES (@ProductId, @QuantityAvailable) RETURNING *</value>
+    <value>INSERT INTO notifications (UserId, Title, Message, CreatedAt, SentAt) VALUES (@UserId, @Message, @Title, @CreatedAt, @SentAt) RETURNING *</value>
     <comment/>
   </data>
   <data name="NotificationUpdateAsync" xml:space="preserve">
-    <value>UPDATE inventoryItems SET ProductId = @ProductId, QuantityAvailable = @QuantityAvailable WHERE InventoryItemId = @InventoryItemId RETURNING *</value>
+    <value>UPDATE notifications SET UserId = @UserId, Title = @Title, Message = @Message, CreatedAt = @CreatedAt, SentAt = @SentAt WHERE NotificationId = @NotificationId RETURNING *</value>
     <comment/>
   </data>
   <data name="NotificationDeleteAsync" xml:space="preserve">
-    <value>DELETE FROM inventoryItems WHERE inventoryItemId = @id RETURNING *</value>
+    <value>DELETE FROM notifications WHERE notificationIdId = @id RETURNING *</value>
     <comment/>
   </data>
   <data name="OrderGetAllAsync" xml:space="preserve">
