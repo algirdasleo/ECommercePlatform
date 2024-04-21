@@ -74,4 +74,7 @@ To run this project, you will need:
     tye run
     ```
 
+<img width="1509" alt="Screenshot 2024-04-20 at 17 11 22" src="https://github.com/algirdasleo/ECommercePlatform/assets/108051817/362ca955-b419-4428-9abb-2b59b587a5dc">
+
 **Tye will start all microservices**, and the Tye dashboard will be available at **http://localhost:8000**, where you can see the status of all services.
+
